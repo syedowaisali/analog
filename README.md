@@ -171,12 +171,6 @@ class SentryLogAdapter : LogAdapter {
 }
 ```
 
-### Logger Flow Diagram
-
-Here is a diagram illustrating how the logger module works:
-
-![Logger Flow Diagram](docs/images/logger-flow.png)
-
 ### Contributing
 
 We welcome contributions to improve `Analog`. Feel free to open issues or submit pull requests with enhancements, bug fixes, or documentation improvements.
