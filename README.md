@@ -20,7 +20,7 @@ You can install **Analog** in your project via Gradle. To add the module to your
 
 ```gradle
 dependencies {
-    implementation 'com.mumdy:analog:1.0.0'
+    implementation 'com.mumdyverse:analog:1.0.0'
 }
 ```
 
