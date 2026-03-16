@@ -40,7 +40,7 @@ fun logVerboseChain(tag: String? = null, block: LogVerboseChainScope.() -> Unit)
  * @param tag The identifier for the log source.
  * @param message A lambda returning the string to be logged.
  */
-fun logDebug(tag: String? = null, message: () -> String) = withTag(tag) { tag ->
+fun logDebug(tag: String? = null, message: () -> Any?) = withTag(tag) { tag ->
     log(Log.DEBUG, tag, message(), null)
 }
 
@@ -60,7 +60,7 @@ fun logDebugChain(tag: String? = null, block: LogDebugChainScope.() -> Unit) = w
  * @param tag The identifier for the log source.
  * @param message A lambda returning the string to be logged.
  */
-fun logInfo(tag: String? = null, message: () -> String) = withTag(tag) { tag ->
+fun logInfo(tag: String? = null, message: () -> Any?) = withTag(tag) { tag ->
     log(Log.INFO, tag, message(), null)
 }
 
@@ -80,7 +80,7 @@ fun logInfoChain(tag: String? = null, block: LogInfoChainScope.() -> Unit) = wit
  * @param tag The identifier for the log source.
  * @param message A lambda returning the string to be logged.
  */
-fun logWarn(tag: String? = null, message: () -> String) = withTag(tag) { tag ->
+fun logWarn(tag: String? = null, message: () -> Any?) = withTag(tag) { tag ->
     log(Log.WARN, tag, message(), null)
 }
 
@@ -100,8 +100,18 @@ fun logWarnChain(tag: String? = null, block: LogWarnChainScope.() -> Unit) = wit
  * @param tag The identifier for the log source.
  * @param message A lambda returning the string to be logged.
  */
-fun logError(tag: String? = null, message: () -> String?) = withTag(tag) { tag ->
+fun logError(tag: String? = null, message: () -> Any?) = withTag(tag) { tag ->
     log(Log.ERROR, tag, message(), null)
+}
+
+/**
+ * Logs a [Log.ERROR] level message along with a [Throwable].
+ *
+ * @param t The exception or error to log.
+ * @param message A lambda returning the string context for the error.
+ */
+fun logError(t: Throwable?, message: (() -> Any?)? = null) {
+    logError(null, t, message)
 }
 
 /**
@@ -111,8 +121,8 @@ fun logError(tag: String? = null, message: () -> String?) = withTag(tag) { tag -
  * @param t The exception or error to log.
  * @param message A lambda returning the string context for the error.
  */
-fun logError(tag: String? = null, t: Throwable, message: () -> String?) = withTag(tag) { tag ->
-    log(Log.ERROR, tag, message(), t)
+fun logError(tag: String? = null, t: Throwable?, message: (() -> Any?)? = null) = withTag(tag) { tag ->
+    log(Log.ERROR, tag, message?.invoke(), t)
 }
 
 /**
@@ -131,7 +141,7 @@ fun logErrorChain(tag: String? = null, block: LogErrorChainScope.() -> Unit) = w
  * @param tag The identifier for the log source.
  * @param message A lambda returning the string to be logged.
  */
-fun logWtf(tag: String? = null, message: () -> String) = withTag(tag) { tag ->
+fun logWtf(tag: String? = null, message: () -> Any?) = withTag(tag) { tag ->
     log(Log.ASSERT, tag, message(), null)
 }
 
@@ -177,7 +187,7 @@ private inline fun withTag(tag: String?, block: (String) -> Unit) {
  * Internal dispatch function that routes log data to the primary adapter and
  * any additional registered integrations.
  */
-private fun log(priority: Int, tag: String, message: String?, t: Throwable?) {
+private fun log(priority: Int, tag: String, message: Any?, t: Throwable?) {
     runIntegrations(
         adapters = listOf(LogManager.adapter) + LogManager.integrations,
         priority = priority,
@@ -204,7 +214,7 @@ private fun runIntegrations(
     adapters: List<LogAdapter?>,
     priority: Int,
     tag: String,
-    message: String?,
+    message: Any?,
     t: Throwable?,
 ) {
     adapters

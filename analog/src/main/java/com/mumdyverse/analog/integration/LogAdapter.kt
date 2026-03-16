@@ -19,7 +19,7 @@ interface LogAdapter {
     fun isLoggable(
         priority: Int,
         tag: String,
-        message: String?,
+        message: Any?,
         throwable: Throwable?
     ): Boolean = true
 
@@ -40,7 +40,7 @@ interface LogAdapter {
     fun log(
         priority: Int,
         tag: String,
-        message: String?,
+        message: Any?,
         throwable: Throwable?
     )
 }

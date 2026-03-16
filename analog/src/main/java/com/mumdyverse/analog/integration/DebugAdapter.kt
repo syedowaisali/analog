@@ -25,7 +25,7 @@ open class DebugAdapter : LogAdapter {
     override fun log(
         priority: Int,
         tag: String,
-        message: String?,
+        message: Any?,
         throwable: Throwable?
     ) {
         val finalMessage = prepareMessage(message, throwable)
@@ -42,12 +42,12 @@ open class DebugAdapter : LogAdapter {
      * Ensures that null or empty messages are replaced with an "" and
      * appends the stack trace if a [Throwable] is provided.
      *
-     * @param message The raw message string.
+     * @param message The raw message any.
      * @param t An optional exception.
      * @return A formatted string containing the message and/or stack trace.
      */
-    private fun prepareMessage(message: String?, t: Throwable?): String {
-        val baseMessage = message ?: ""
+    private fun prepareMessage(message: Any?, t: Throwable?): String {
+        val baseMessage = message?.toString() ?: ""
         return if (t != null) "$baseMessage\n${getStackTraceString(t)}" else baseMessage
     }
 
